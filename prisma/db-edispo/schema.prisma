@@ -1,0 +1,333 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/@prisma-dbedispo/client"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL_EDISPO")
+  relationMode = "foreignKeys"
+}
+
+model cetak_sp {
+  sp_id             Int                 @id @default(autoincrement())
+  sp_number         String              @unique(map: "sp_number_UNIQUE") @db.VarChar(100)
+  print_date        DateTime?           @db.DateTime(0)
+  printed_by        String?             @db.VarChar(100)
+  tbl_detail_berita tbl_detail_berita[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model cte2 {
+  a Int
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tbl_berita {
+  arsip_kd                String                   @id @db.Char(20)
+  berita_kd               String                   @db.Char(50)
+  jenis_kd                Int
+  sifat_kd                Int
+  perwakilan_kd           Int
+  jabatan_pengirim        String                   @db.VarChar(50)
+  derajat_kd              String                   @db.Char(3)
+  tgl_berita              DateTime                 @db.Date
+  tgl_diarsipkan          DateTime                 @db.DateTime(0)
+  perihal_berita          String                   @db.VarChar(255)
+  berita_file             String?                  @db.VarChar(100)
+  keterangan              String?                  @db.Text
+  status_disposisi        String                   @default("T") @db.Char(1)
+  tgl_disposisi           DateTime?                @db.DateTime(0)
+  berita_disposisikan     String                   @default("T") @db.Char(1)
+  berita_fungsi_disposisi Int
+  berita_input_fungsi     Int
+  berita_berkas_disposisi String?                  @db.VarChar(255)
+  berita_input_user       Int?
+  tbl_derajat             tbl_derajat              @relation(fields: [derajat_kd], references: [derajat_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_berita_tbl_derajat1")
+  tbl_jenis_berita        tbl_jenis_berita         @relation(fields: [jenis_kd], references: [jenis_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_berita_tbl_jenis_berita1")
+  tbl_perwakilan          tbl_perwakilan           @relation(fields: [perwakilan_kd], references: [perwakilan_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_berita_tbl_perwakilan1")
+  tbl_detail_berita       tbl_detail_berita[]
+  tbl_disposisi           tbl_disposisi[]
+  tbl_disposisi_lanjutan  tbl_disposisi_lanjutan[]
+  tbl_korespondensi       tbl_korespondensi[]
+
+  @@index([derajat_kd], map: "fk_tbl_berita_tbl_derajat1")
+  @@index([jenis_kd], map: "fk_tbl_berita_tbl_jenis_berita1")
+  @@index([perwakilan_kd], map: "fk_tbl_berita_tbl_perwakilan1")
+}
+
+model tbl_berita_keluar {
+  arsip_kd       String    @id @db.VarChar(20)
+  sifat_kd       Int?
+  berita_kd      String?   @db.VarChar(50)
+  pembuat_kd     String?   @db.VarChar(50)
+  tgl_berita     DateTime? @db.Date
+  perihal_berita String?   @db.VarChar(255)
+  berita_file    String?   @db.VarChar(100)
+  no_agenda      String?   @db.VarChar(10)
+  jml_hal        Int?
+
+  @@index([pembuat_kd], map: "idx_tbl_berita_keluar_pembuat_kd")
+}
+
+model tbl_berita_keluar_fungsi_kd {
+  arsip_kd                String  @db.VarChar(20)
+  berita_keluar_fungsi_kd Int     @id @default(autoincrement())
+  fungsi_kd               String? @db.VarChar(50)
+
+  @@index([fungsi_kd, arsip_kd], map: "idx_tbl_berita_keluar_fungsi_kd_arsip_kd")
+}
+
+model tbl_cux {
+  id              BigInt   @id @default(autoincrement())
+  line            Int?
+  kd_berita       String   @unique @db.VarChar(50)
+  perihal_berita  String   @db.VarChar(1000)
+  derajat         String
+  tanggal         String   @db.VarChar(50)
+  nama_perwakilan String   @db.VarChar(256)
+  iddistribusi    String   @unique @db.VarChar(50)
+  kode_pengirim   String   @db.VarChar(50)
+  nomor_konsep    String?  @db.VarChar(256)
+  no_agenda       String
+  rahasia         String
+  is_disposisi    Boolean
+  pendispo        String?  @db.VarChar(256)
+  created_at      DateTime @default(now())
+  map_to          String?  @db.VarChar(256)
+}
+
+model tbl_derajat {
+  derajat_kd   String       @id @db.Char(3)
+  derajat_nama String       @db.Char(20)
+  tbl_berita   tbl_berita[]
+}
+
+model tbl_detail_berita {
+  detail_berita_id Int         @id @default(autoincrement())
+  halaman          Int?
+  pwk_code         String?     @db.VarChar(5)
+  arsip_kd         String?     @db.Char(20)
+  sp_id            Int?
+  tbl_berita       tbl_berita? @relation(fields: [arsip_kd], references: [arsip_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_table1_tbl_berita1")
+  cetak_sp         cetak_sp?   @relation(fields: [sp_id], references: [sp_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_detail_berita_cetak_sp1")
+
+  @@index([arsip_kd], map: "fk_table1_tbl_berita1_idx")
+  @@index([sp_id], map: "fk_tbl_detail_berita_cetak_sp1_idx")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tbl_disposisi {
+  disposisi_kd         Int                    @id @default(autoincrement())
+  arsip_kd             String                 @db.Char(20)
+  tgl_disposisi        DateTime               @db.Date
+  disposisi_oleh       Int
+  catatan              String                 @db.Text
+  disposisi_lanjutan   String                 @default("T") @db.Char(1)
+  tbl_berita           tbl_berita             @relation(fields: [arsip_kd], references: [arsip_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_disposisi_tbl_berita")
+  tbl_disposisi_detail tbl_disposisi_detail[]
+
+  @@index([arsip_kd], map: "fk_tbl_disposisi_tbl_berita")
+}
+
+model tbl_disposisi_detail {
+  disposisi_detail_kd      Int           @id @default(autoincrement())
+  disposisi_kd             Int
+  detail_fungsi_kd         Int
+  detail_terima            String        @default("T") @db.Char(1)
+  detail_korespondensi     String?       @db.Text
+  detail_waktu             DateTime?     @db.DateTime(0)
+  berita_status_pengerjaan String?       @db.Char(1)
+  detail_perhatian         String?       @db.Char(1)
+  status_fungsi            Int
+  tbl_disposisi            tbl_disposisi @relation(fields: [disposisi_kd], references: [disposisi_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_disposisi_detail_tbl_disposisi1")
+
+  @@index([disposisi_kd], map: "fk_tbl_disposisi_detail_tbl_disposisi1")
+}
+
+model tbl_disposisi_instruksi {
+  disposisi_instruksi_kd Int     @id @default(autoincrement())
+  arsip_kd               String  @db.Char(20)
+  instruksi_kd           Int
+  instruksi_perhatian    String? @db.Char(1)
+}
+
+model tbl_disposisi_lanjutan {
+  disposisi_lanjutan_kd            Int                                @id @default(autoincrement())
+  arsip_kd                         String                             @db.Char(20)
+  disposisi_lanjutan_oleh          Int
+  disposisi_lanjutan_catatan       String                             @db.VarChar(255)
+  disposisi_lanjutan_tanggal       DateTime                           @db.DateTime(0)
+  tbl_berita                       tbl_berita                         @relation(fields: [arsip_kd], references: [arsip_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_disposisi_lanjutan_tbl_berita1")
+  tbl_disposisi_lanjutan_detail    tbl_disposisi_lanjutan_detail[]
+  tbl_disposisi_lanjutan_instruksi tbl_disposisi_lanjutan_instruksi[]
+
+  @@index([arsip_kd], map: "fk_tbl_disposisi_lanjutan_tbl_berita1")
+}
+
+model tbl_disposisi_lanjutan_detail {
+  disposisi_lanjutan_detail_kd Int                    @id @default(autoincrement())
+  disposisi_lanjutan_kd        Int
+  detail_user_kd               Int
+  detail_terima                String                 @default("T") @db.Char(1)
+  detail_korespondensi         String?                @db.VarChar(255)
+  detail_waktu                 DateTime?              @db.DateTime(0)
+  berita_status_pengerjaan     String?                @db.Char(1)
+  tbl_disposisi_lanjutan       tbl_disposisi_lanjutan @relation(fields: [disposisi_lanjutan_kd], references: [disposisi_lanjutan_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_disposisi_lanjutan_detail_tbl_disposisi_lanjutan1")
+
+  @@index([disposisi_lanjutan_kd], map: "fk_tbl_disposisi_lanjutan_detail_tbl_disposisi_lanjutan1")
+}
+
+model tbl_disposisi_lanjutan_instruksi {
+  disposisi_lanjutan_instruksi_kd Int                    @id @default(autoincrement())
+  disposisi_lanjutan_kd           Int
+  instruksi_kd                    Int
+  tbl_disposisi_lanjutan          tbl_disposisi_lanjutan @relation(fields: [disposisi_lanjutan_kd], references: [disposisi_lanjutan_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_disposisi_lanjutan_instruksi_tbl_disposisi_lanjutan1")
+
+  @@index([disposisi_lanjutan_kd], map: "fk_tbl_disposisi_lanjutan_instruksi_tbl_disposisi_lanjutan1")
+}
+
+model tbl_enc_key {
+  id         Int       @id @default(autoincrement())
+  start_date DateTime? @db.DateTime(0)
+  end_date   DateTime? @db.DateTime(0)
+  user_key   String?   @db.VarChar(255)
+  admin_key  String?   @db.VarChar(255)
+}
+
+model tbl_fungsi {
+  fungsi_kd                Int                        @id @default(autoincrement())
+  nama_fungsi              String                     @db.VarChar(150)
+  status_fungsi            String                     @default("Y") @db.Char(1)
+  disposisi_fungsi         String                     @default("T") @db.Char(1)
+  fungsi_input             String                     @default("T") @db.Char(1)
+  fungsi_urut              Int
+  kode                     String                     @db.Char(15)
+  tbl_fungsi_group_anggota tbl_fungsi_group_anggota[]
+  tbl_user                 tbl_user[]
+}
+
+model tbl_fungsi_group {
+  id                       Int                        @id @default(autoincrement())
+  nama                     String                     @db.Char(50)
+  tbl_fungsi_group_anggota tbl_fungsi_group_anggota[]
+}
+
+model tbl_fungsi_group_anggota {
+  id_group         Int
+  id_fungsi        Int
+  tbl_fungsi       tbl_fungsi       @relation(fields: [id_fungsi], references: [fungsi_kd], onDelete: NoAction)
+  tbl_fungsi_group tbl_fungsi_group @relation(fields: [id_group], references: [id], onDelete: NoAction)
+
+  @@unique([id_group, id_fungsi])
+  @@index([id_fungsi], map: "tbl_fungsi_group_anggota_id_fungsi_fkey")
+}
+
+model tbl_instruksi {
+  instruksi_kd     Int    @id @default(autoincrement())
+  instruksi_nama   String @db.VarChar(200)
+  instruksi_status String @default("Aktif") @db.VarChar(20)
+  instruksi_order  Int
+}
+
+model tbl_jenis_berita {
+  jenis_kd   Int          @id @default(autoincrement())
+  jenis_nama String       @db.Char(35)
+  tbl_berita tbl_berita[]
+}
+
+model tbl_korespondensi {
+  korespondensi_id       Int        @id @default(autoincrement())
+  arsip_kd               String     @db.VarChar(20)
+  user_nama              String     @db.VarChar(255)
+  korespondensi_komentar String     @db.VarChar(255)
+  korespondensi_datetime DateTime   @db.DateTime(0)
+  tbl_berita             tbl_berita @relation(fields: [arsip_kd], references: [arsip_kd], onDelete: NoAction, onUpdate: NoAction, map: "fk_tbl_korespondensi_tbl_berita1")
+
+  @@index([arsip_kd], map: "fk_tbl_korespondensi_tbl_berita1")
+}
+
+model tbl_negara {
+  id_negara   Int    @id @default(autoincrement())
+  nama_negara String @db.VarChar(255)
+  kode_negara String @db.VarChar(255)
+
+  @@index([id_negara], map: "id_negara")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tbl_negara2 {
+  Country String? @db.VarChar(300)
+  Alpha2  String? @db.VarChar(300)
+  Alpha3  String? @db.VarChar(300)
+  Num     String? @db.VarChar(300)
+
+  @@ignore
+}
+
+model tbl_perwakilan {
+  perwakilan_kd             Int                        @id @default(autoincrement())
+  perwakilan_nama           String                     @db.Char(100)
+  negara                    String?                    @db.VarChar(50)
+  tbl_berita                tbl_berita[]
+  tbl_perwakilan_bridge_cux tbl_perwakilan_bridge_cux?
+}
+
+model tbl_perwakilan_bridge_cux {
+  perwakilan_kd  Int            @unique
+  kode_pengirim  String         @id @db.VarChar(5)
+  tbl_perwakilan tbl_perwakilan @relation(fields: [perwakilan_kd], references: [perwakilan_kd], onDelete: Cascade)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tbl_setting {
+  id                             Int     @id @default(autoincrement())
+  nama_perwakilan                String? @db.VarChar(100)
+  nama_singkat_perwakilan        String? @db.VarChar(100)
+  nama_jabatan_kepala_perwakilan String? @db.VarChar(100)
+  warna_latar                    String? @db.VarChar(20)
+  alamat_perwakilan              String? @db.VarChar(255)
+  email_administrator            String? @db.VarChar(50)
+  email_administrator_password   String  @db.VarChar(50)
+  user_notifikasi_email          String  @db.Char(1)
+  status_config                  Int?    @default(0)
+}
+
+model tbl_sifat {
+  sifat_kd   Int    @id @default(autoincrement())
+  sifat_nama String @db.VarChar(100)
+}
+
+model tbl_status_fungsi {
+  id_status_fungsi   Int    @id @default(autoincrement())
+  nama_status_fungsi String @db.VarChar(50)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tbl_user {
+  user_kd                 Int        @id @default(autoincrement())
+  user_nama               String     @db.Char(25)
+  user_password           String     @db.Char(50)
+  user_namalengkap        String     @db.Char(40)
+  fungsi_kd               Int
+  user_status             String     @db.Char(1)
+  user_menerima_disposisi String     @default("Y") @db.Char(1)
+  user_foto               String     @default("avatar.jpg") @db.VarChar(100)
+  user_email              String     @db.VarChar(50)
+  user_notifikasi_email   String     @db.VarChar(50)
+  koordinator_fungsi      String     @db.Char(1)
+  home_staff              String     @db.Char(1)
+  tbl_fungsi              tbl_fungsi @relation(fields: [fungsi_kd], references: [fungsi_kd], onDelete: NoAction, map: "tbl_user_tbl_fungsi_FK")
+
+  @@index([fungsi_kd], map: "tbl_user_tbl_fungsi_FK")
+}
+
+model tbl_version {
+  version_id          Int      @id @default(autoincrement())
+  version_name        String   @db.VarChar(255)
+  version_author      String   @db.VarChar(255)
+  version_description String   @db.VarChar(1000)
+  version_release     DateTime @db.Date
+}
