@@ -16,6 +16,8 @@ COPY src ./src
 COPY public ./public
 COPY next.config.mjs .
 COPY tsconfig.json .
+COPY tailwind.config.ts .
+COPY postcss.config.mjs .
 
 # Create the necessary directories
 RUN mkdir -p /uploads/KELUAR /uploads/MASUK /uploads/TMP
@@ -27,7 +29,6 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Generate Prisma Client
 COPY prisma/db-edispo/schema.prisma ./prisma/db-edispo/schema.prisma
 COPY prisma/db-penomoran/schema.prisma ./prisma/db-penomoran/schema.prisma
-
 RUN pnpm prisma generate --schema ./prisma/db-edispo/schema.prisma
 RUN pnpm prisma generate --schema ./prisma/db-penomoran/schema.prisma
 
