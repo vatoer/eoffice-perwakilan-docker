@@ -7,7 +7,7 @@ import {
 } from "@/data/berita-keluar";
 import { uploadFile } from "@/lib/legacy-edispo/upload-file";
 import { setPassword } from "@/lib/pdf";
-import { BASE_PATH_UPLOAD, saveFile } from "@/lib/save-file";
+import { BASE_PATH_UPLOAD_KELUAR, saveFile } from "@/lib/save-file";
 import {
   BeritaKeluar,
   BeritaKeluarEditMode,
@@ -46,7 +46,6 @@ export const simpanDokumenKeluar = async (
     // WARNING
     // SAVE FILE FIRST BEFORE SAVING THE DATA
     // ===================================================
-    const tmpPath = path.join(process.cwd(), "files", "tmp");
     let savedFilePath = "";
 
     console.log("[CHECK FILE]", file);
@@ -54,7 +53,6 @@ export const simpanDokumenKeluar = async (
     if (isFile) {
       const save = await saveFile({
         file,
-        filesFolder: tmpPath,
       });
       if (!save.success) {
         return save as ErrorResponse;
@@ -93,12 +91,16 @@ export const simpanDokumenKeluar = async (
 
     const BRPath = beritaKeluarbaru.sifat_kd === 1 ? "RAHASIA" : "BIASA";
 
-    if (!BASE_PATH_UPLOAD || !fs.existsSync(BASE_PATH_UPLOAD)) {
-      console.warn("BASE_PATH_UPLOAD not found, using process.cwd()");
+    if (!BASE_PATH_UPLOAD_KELUAR || !fs.existsSync(BASE_PATH_UPLOAD_KELUAR)) {
+      console.warn("BASE_PATH_UPLOAD_KELUAR not found, using process.cwd()");
       yearlyFolder = path.join(process.cwd(), "files", BRPath, year.toString());
     } else {
-      // BASE_PATH_UPLOAD must exist before creating child folders
-      yearlyFolder = path.join(BASE_PATH_UPLOAD, BRPath, year.toString());
+      // BASE_PATH_UPLOAD_KELUAR must exist before creating child folders
+      yearlyFolder = path.join(
+        BASE_PATH_UPLOAD_KELUAR,
+        BRPath,
+        year.toString()
+      );
     }
 
     if (!fs.existsSync(yearlyFolder)) {

@@ -4,6 +4,9 @@ import fs from "fs";
 import path from "path";
 
 export const BASE_PATH_UPLOAD = process.env.BASE_PATH_UPLOAD;
+export const BASE_PATH_UPLOAD_KELUAR = process.env.BASE_PATH_UPLOAD_KELUAR;
+export const BASE_PATH_UPLOAD_MASUK = process.env.BASE_PATH_UPLOAD_MASUK;
+export const TMP_UPLOAD_PATH = process.env.TMP_UPLOAD_PATH;
 
 type SaveFileOptions = {
   file: File;
@@ -28,15 +31,24 @@ export const saveFile = async ({
   try {
     const filename = sanitizeFilename(path.basename(file.name));
 
+    // check if fileFolder is defined
+    if (!filesFolder) {
+      // TMP_UPLOAD_PATH must exist before creating child folders
+      if (!TMP_UPLOAD_PATH || !fs.existsSync(TMP_UPLOAD_PATH)) {
+        console.warn(
+          "[SAVE FILE]TMP_UPLOAD_PATH not found, using process.cwd()"
+        );
+        filesFolder = path.join(process.cwd(), "files");
+      } else {
+        filesFolder = TMP_UPLOAD_PATH;
+      }
+    }
+
     // check if file is not empty
     if (!file) {
       return { success: false, error: "File is required" };
     }
 
-    // check if fileFolder is defined
-    if (!filesFolder) {
-      filesFolder = path.join(process.cwd(), "files");
-    }
     //const filesFolder = path.join(process.cwd(), "files");
     if (!fs.existsSync(filesFolder)) {
       fs.mkdirSync(filesFolder);
