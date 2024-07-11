@@ -44,4 +44,11 @@ cd ./prisma
 mkdir db-edispo
 pnpm prisma db pull --schema ./prisma/db-edispo/schema.prisma
 pnpm prisma generate --schema ./prisma/db-edispo/schema.prisma
+
+pnpm prisma db pull --schema ./prisma/db-penomoran/schema.prisma
+pnpm prisma generate --schema ./prisma/db-penomoran/schema.prisma
 ```
+
+### extend authjs
+
+create new types 'next-auth-d.ts'

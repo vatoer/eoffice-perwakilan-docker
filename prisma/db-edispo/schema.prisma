@@ -205,14 +205,14 @@ model tbl_fungsi {
   fungsi_input             String                     @default("T") @db.Char(1)
   fungsi_urut              Int
   kode                     String                     @db.Char(15)
-  tbl_fungsi_group_anggota tbl_fungsi_group_anggota[]
+  group                    tbl_fungsi_group_anggota[]
   tbl_user                 tbl_user[]
 }
 
 model tbl_fungsi_group {
   id                       Int                        @id @default(autoincrement())
   nama                     String                     @db.Char(50)
-  tbl_fungsi_group_anggota tbl_fungsi_group_anggota[]
+  anggota tbl_fungsi_group_anggota[]
 }
 
 model tbl_fungsi_group_anggota {
