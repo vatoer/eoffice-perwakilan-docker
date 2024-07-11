@@ -22,7 +22,16 @@ RUN mkdir -p /uploads/KELUAR /uploads/MASUK /uploads/TMP
 
 # Next.js collects completely anonymous telemetry data about general usage. Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line to disable telemetry at run time
-# ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Generate Prisma Client
+COPY prisma/db-edispo/schema.prisma ./prisma/db-edispo/schema.prisma
+COPY prisma/db-penomoran/schema.prisma ./prisma/db-penomoran/schema.prisma
+
+RUN pnpm prisma generate --schema ./prisma/db-edispo/schema.prisma
+RUN pnpm prisma generate --schema ./prisma/db-penomoran/schema.prisma
+
+
 
 # Note: Don't expose ports here, Compose will handle that for us
 
