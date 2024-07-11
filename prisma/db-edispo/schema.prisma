@@ -198,20 +198,20 @@ model tbl_enc_key {
 }
 
 model tbl_fungsi {
-  fungsi_kd                Int                        @id @default(autoincrement())
-  nama_fungsi              String                     @db.VarChar(150)
-  status_fungsi            String                     @default("Y") @db.Char(1)
-  disposisi_fungsi         String                     @default("T") @db.Char(1)
-  fungsi_input             String                     @default("T") @db.Char(1)
-  fungsi_urut              Int
-  kode                     String                     @db.Char(15)
-  group                    tbl_fungsi_group_anggota[]
-  tbl_user                 tbl_user[]
+  fungsi_kd        Int                        @id @default(autoincrement())
+  nama_fungsi      String                     @db.VarChar(150)
+  status_fungsi    String                     @default("Y") @db.Char(1)
+  disposisi_fungsi String                     @default("T") @db.Char(1)
+  fungsi_input     String                     @default("T") @db.Char(1)
+  fungsi_urut      Int
+  kode             String                     @db.Char(15)
+  group            tbl_fungsi_group_anggota[]
+  tbl_user         tbl_user[]
 }
 
 model tbl_fungsi_group {
-  id                       Int                        @id @default(autoincrement())
-  nama                     String                     @db.Char(50)
+  id      Int                        @id @default(autoincrement())
+  nama    String                     @db.Char(50)
   anggota tbl_fungsi_group_anggota[]
 }
 
