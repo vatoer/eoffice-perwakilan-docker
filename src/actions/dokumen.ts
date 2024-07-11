@@ -4,7 +4,7 @@ import { simpanBerita, updateBeritaFile } from "@/data/berita";
 import { getInboxForEditing } from "@/data/inbox";
 import { uploadFile } from "@/lib/legacy-edispo/upload-file";
 import { setPassword } from "@/lib/pdf";
-import { BASE_PATH_UPLOAD, saveFile } from "@/lib/save-file";
+import { BASE_PATH_UPLOAD_MASUK, saveFile } from "@/lib/save-file";
 import { Berita, BeritaWithoutFile } from "@/zod/schemas/berita";
 import { auth } from "@auth/auth";
 import fs from "fs";
@@ -49,7 +49,6 @@ export const simpanDokumenMasuk = async (
     // WARNING
     // SAVE FILE FIRST BEFORE SAVING THE DATA
     // ===================================================
-    const tmpPath = path.join(process.cwd(), "files", "tmp");
     let savedFilePath = "";
 
     console.log("[CHECK FILE]", file);
@@ -58,7 +57,6 @@ export const simpanDokumenMasuk = async (
     if (isFile) {
       const save = await saveFile({
         file,
-        filesFolder: tmpPath,
       });
       if (!save.success) {
         return save as ErrorResponse;
@@ -101,12 +99,12 @@ export const simpanDokumenMasuk = async (
 
     const BRPath = beritaBaru.sifat_kd === 2 ? "RAHASIA" : "BIASA";
 
-    if (!BASE_PATH_UPLOAD || !fs.existsSync(BASE_PATH_UPLOAD)) {
+    if (!BASE_PATH_UPLOAD_MASUK || !fs.existsSync(BASE_PATH_UPLOAD_MASUK)) {
       console.warn("BASE_PATH_UPLOAD not found, using process.cwd()");
       yearlyFolder = path.join(process.cwd(), "files", BRPath, year.toString());
     } else {
       // BASE_PATH_UPLOAD must exist before creating child folders
-      yearlyFolder = path.join(BASE_PATH_UPLOAD, BRPath, year.toString());
+      yearlyFolder = path.join(BASE_PATH_UPLOAD_MASUK, BRPath, year.toString());
     }
 
     if (!fs.existsSync(yearlyFolder)) {
