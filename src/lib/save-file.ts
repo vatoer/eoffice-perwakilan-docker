@@ -30,6 +30,7 @@ export const saveFile = async ({
 }: SaveFileOptions): Promise<ActionResponse<SaveFileResult>> => {
   try {
     const filename = sanitizeFilename(path.basename(file.name));
+    console.log("[SAVE FILE] start");
 
     // check if fileFolder is defined
     if (!filesFolder) {

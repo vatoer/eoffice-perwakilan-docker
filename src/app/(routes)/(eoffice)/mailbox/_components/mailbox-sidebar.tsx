@@ -7,6 +7,7 @@ import { useToggleSidebar } from "@/hooks/use-toggle-sidebar";
 import { Route } from "@/routes";
 import {
   Book,
+  Contact,
   FileText,
   Inbox,
   Layout,
@@ -38,6 +39,7 @@ const iconMap: { [key: string]: LucideIcon | IconType } = {
   List,
   BsEnvelopeArrowUp,
   BsEnvelopeArrowDown,
+  Contact,
 };
 
 interface MailboxSidebarProps {

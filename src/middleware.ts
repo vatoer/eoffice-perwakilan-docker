@@ -16,7 +16,7 @@ export const middleware = auth(async (req) => {
     const isLoggenIn = !!session;
 
     console.log("[MIDDLEWARE] user: ", session?.user?.name);
-    console.log("[MIDDLEWARE] trying access to:", nextUrl.pathname);
+    console.log("[MIDDLEWARE] trying access to url:", nextUrl.pathname);
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
@@ -41,6 +41,7 @@ export const middleware = auth(async (req) => {
     // if the route is an Auth route and is log in, redirect to the default route
     if (isAuthRoute) {
       if (isLoggenIn) {
+        console.log("[MIDDLEWARE] Redirect to default route");
         return Response.redirect(new URL(DEFAULT_ROUTE_AFTER_LOGIN, nextUrl));
       }
       return;
@@ -117,3 +118,5 @@ export const config = {
 };
 
 export default middleware;
+
+// check middleware

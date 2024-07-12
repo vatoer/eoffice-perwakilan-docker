@@ -174,6 +174,24 @@ const routes: Route[] = [
     permissions: ["write:simbra"],
     displayAsMenu: true,
   },
+  {
+    name: "setting-user",
+    label: "users",
+    href: "/setting/user",
+    icon: "Contact",
+    order: 45,
+    permissions: ["write:simbra"],
+    displayAsMenu: true,
+  },
+  {
+    name: "setting-general",
+    label: "general",
+    href: "/setting/general",
+    icon: "Settings",
+    order: 50,
+    permissions: ["write:simbra"],
+    displayAsMenu: true,
+  },
 ];
 
 export async function getAllowedRoutes(
@@ -207,3 +225,5 @@ export async function getAllowedRoutes(
 
   return sortedRoutes;
 }
+
+// check routes

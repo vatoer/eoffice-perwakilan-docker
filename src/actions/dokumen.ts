@@ -55,6 +55,7 @@ export const simpanDokumenMasuk = async (
     const isFile = file instanceof File;
 
     if (isFile) {
+      console.log("[isFile]", true);
       const save = await saveFile({
         file,
       });
@@ -62,6 +63,8 @@ export const simpanDokumenMasuk = async (
         return save as ErrorResponse;
       }
       savedFilePath = save.data.path;
+    } else {
+      console.log("[isFile]", true);
     }
 
     let yearlyFolder;

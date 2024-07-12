@@ -1,0 +1,381 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  output        = "../../node_modules/@prisma-dbpenomoran/client"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL_PENOMORAN")
+  relationMode = "foreignKeys"
+}
+
+model tbl_application {
+  application_id Int       @id @default(autoincrement())
+  user_id        Int?
+  position_id    Int?
+  created_date   DateTime? @db.DateTime(0)
+  reg_num        String?   @db.VarChar(10)
+  file_lamaran   String?   @db.VarChar(50)
+}
+
+model tbl_application_doc {
+  id             Int       @id @default(autoincrement())
+  is_active      Int?
+  modified_date  DateTime? @db.DateTime(0)
+  modified_by    Int?
+  application_id Int?
+  filename       String?   @db.VarChar(50)
+  doc_id         Int?
+  check_1        Int?
+  check_2        Int?
+}
+
+model tbl_bapk {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  fungsi     Int
+  perihal    String   @db.Text
+  input_by   Int
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_bukutamu {
+  id_bukutamu     Int      @id @default(autoincrement())
+  id_tujuan       Int
+  nama_pengunjung String   @db.VarChar(200)
+  alamat          String   @db.VarChar(300)
+  telp            Int
+  keperluan       String   @db.VarChar(500)
+  tanggal         DateTime @db.Date
+  jam             DateTime @db.Time(0)
+  email           String   @db.VarChar(50)
+  status          Int
+  input_by        Int
+  input_date      DateTime @db.DateTime(0)
+}
+
+model tbl_document {
+  id           Int       @id @default(autoincrement())
+  user_id      Int?
+  doc_id       Int?
+  created_date DateTime? @db.Date
+  filename     String?   @db.VarChar(50)
+}
+
+model tbl_fungsi {
+  id_fungsi   Int    @id @default(autoincrement())
+  nama_fungsi String @db.VarChar(30)
+  kd_fungsi   String @db.VarChar(11)
+}
+
+model tbl_keluar {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  fungsi     String   @db.Text
+  tujuan     String   @db.Text
+  isi_surat  String   @db.Text
+  input_by   Int
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_keputusan {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  perihal    String   @db.Text
+  input_by   Int
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_keterangan {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  fungsi     String   @db.Text
+  perihal    String   @db.Text
+  kepada     String   @db.Text
+  input_by   Int
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_konsumsi {
+  id_konsumsi           Int                   @id @default(autoincrement())
+  id_m_konsumsi         Int
+  id_peminjaman         Int
+  tbl_m_konsumsi        tbl_m_konsumsi        @relation(fields: [id_m_konsumsi], references: [id_m_konsumsi], onDelete: NoAction, onUpdate: NoAction, map: "tbl_konsumsi_ibfk_1")
+  tbl_pinjam_ruangrapat tbl_pinjam_ruangrapat @relation(fields: [id_peminjaman], references: [id_peminjaman], onDelete: NoAction, onUpdate: NoAction, map: "tbl_konsumsi_ibfk_2")
+
+  @@index([id_m_konsumsi], map: "id_m_konsumsi")
+  @@index([id_peminjaman], map: "id_peminjaman")
+}
+
+model tbl_log {
+  id         Int       @unique(map: "id") @default(autoincrement())
+  log_date   DateTime? @db.DateTime(0)
+  log_by     Int?
+  log_action String?   @db.VarChar(20)
+  log_table  String?   @db.VarChar(50)
+  log_idrow  Int?
+
+  @@index([log_by], map: "log_by")
+}
+
+model tbl_m_kegiatan {
+  id_kegiatan    Int    @id @default(autoincrement())
+  jenis_kegiatan String @db.VarChar(100)
+}
+
+model tbl_m_konsumsi {
+  id_m_konsumsi  Int            @id @default(autoincrement())
+  jenis_konsumsi String         @db.VarChar(50)
+  tbl_konsumsi   tbl_konsumsi[]
+}
+
+model tbl_m_mobil {
+  id_mobil            Int         @id @default(autoincrement())
+  merk_mobil          String      @db.VarChar(100)
+  seri                String      @db.VarChar(100)
+  plat_mobil          String      @db.VarChar(10)
+  jenis_mobil         String      @db.VarChar(50)
+  kapasitas_penumpang String      @db.Text
+  bahan_bakar         String      @db.Text
+  harga               Int
+  usia                Int
+  tanggal             DateTime    @db.Date
+  untuk               String      @db.VarChar(50)
+  kondisi             String      @db.VarChar(100)
+  kilometer           Int
+  status              String      @db.Text
+  tbl_mobil           tbl_mobil[]
+}
+
+model tbl_m_peralatan {
+  id_m_peralatan Int             @id @default(autoincrement())
+  nama_peralatan String          @db.VarChar(100)
+  tbl_peralatan  tbl_peralatan[]
+}
+
+model tbl_m_position {
+  mposition    String? @db.VarChar(255)
+  id_mposition Int     @id @default(autoincrement())
+}
+
+model tbl_m_ruang {
+  id_ruang   Int    @id @default(autoincrement())
+  nama_ruang String @db.VarChar(100)
+  kapasitas  Int
+}
+
+model tbl_m_supir {
+  id_m_supir Int         @id @default(autoincrement())
+  nama_supir String      @db.VarChar(50)
+  status     String      @db.Text
+  no_telp    String      @db.VarChar(50)
+  no_kantor  String      @db.VarChar(50)
+  no_rumah   String      @db.VarChar(50)
+  tbl_supir  tbl_supir[]
+}
+
+model tbl_m_tujuan {
+  id_tujuan   Int    @id @default(autoincrement())
+  nama_tujuan String @db.VarChar(200)
+}
+
+model tbl_mobil {
+  id_pinjam_mobil      Int                  @id @default(autoincrement())
+  id_mobil             Int
+  id_peminjaman_mobil  Int
+  tbl_m_mobil          tbl_m_mobil          @relation(fields: [id_mobil], references: [id_mobil], onDelete: NoAction, onUpdate: NoAction, map: "tbl_mobil_ibfk_1")
+  tbl_mobil_user_input tbl_mobil_user_input @relation(fields: [id_peminjaman_mobil], references: [id_peminjaman_mobil], onDelete: NoAction, onUpdate: NoAction, map: "tbl_mobil_ibfk_2")
+
+  @@index([id_mobil], map: "id_mobil")
+  @@index([id_peminjaman_mobil], map: "id_peminjaman_mobil")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model tbl_mobil_user_input {
+  id_peminjaman_mobil Int         @id @default(autoincrement())
+  tgl_awal            DateTime?   @db.Date
+  tgl_akhir           DateTime?   @db.Date
+  jam_awal            DateTime?   @db.Time(0)
+  jam_akhir           DateTime?   @db.Time(0)
+  acara               String?     @db.Text
+  contact_person      String?     @db.VarChar(100)
+  no_telp             String?     @db.VarChar(12)
+  input_by            Int?
+  status              Int
+  input_date          DateTime    @db.DateTime(0)
+  tempat              String?     @db.Text
+  fungsi              String      @db.Text
+  tbl_mobil           tbl_mobil[]
+  tbl_supir           tbl_supir[]
+}
+
+model tbl_nota {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  fungsi     String   @db.Text
+  perihal    String   @db.Text
+  input_by   Int?
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_notadiplomatik {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  fungsi     Int
+  perihal    String   @db.Text
+  input_by   Int
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_pengumuman {
+  id            Int       @id @default(autoincrement())
+  title         String?   @db.VarChar(100)
+  content       String?   @db.VarChar(1000)
+  created_date  DateTime? @db.DateTime(0)
+  created_by    Int?
+  modified_date DateTime? @db.DateTime(0)
+  modified_by   Int?
+  is_active     Int?
+}
+
+model tbl_peralatan {
+  id_peralatan          Int                   @id @default(autoincrement())
+  id_peminjaman         Int
+  id_m_peralatan        Int
+  tbl_m_peralatan       tbl_m_peralatan       @relation(fields: [id_m_peralatan], references: [id_m_peralatan], onDelete: NoAction, onUpdate: NoAction, map: "tbl_peralatan_ibfk_1")
+  tbl_pinjam_ruangrapat tbl_pinjam_ruangrapat @relation(fields: [id_peminjaman], references: [id_peminjaman], onDelete: NoAction, onUpdate: NoAction, map: "tbl_peralatan_ibfk_2")
+
+  @@index([id_m_peralatan], map: "id_m_peralatan")
+  @@index([id_peminjaman], map: "id_peminjaman")
+}
+
+model tbl_perwakilan {
+  pwk_id              Int     @id @default(autoincrement())
+  country_rep_name    String? @db.VarChar(200)
+  country_rep_name_id String? @db.VarChar(200)
+}
+
+model tbl_pinjam_ruangrapat {
+  id_peminjaman  Int             @id @default(autoincrement())
+  id_ruang       Int
+  tgl_awal       DateTime        @db.Date
+  tgl_akhir      DateTime        @db.Date
+  jam_awal       DateTime        @db.Time(0)
+  jam_akhir      DateTime        @db.Time(0)
+  id_fungsi      Int
+  nama_kegiatan  String          @db.VarChar(500)
+  id_kegiatan    Int
+  jumlah_tamu    Int
+  peralatan_lain String          @db.Text
+  contact_person String          @db.VarChar(100)
+  no_telp        String          @db.VarChar(12)
+  input_by       Int
+  input_date     DateTime        @db.DateTime(0)
+  datetime_awal  DateTime        @db.DateTime(0)
+  datetime_akhir DateTime        @db.DateTime(0)
+  status         Int
+  tbl_konsumsi   tbl_konsumsi[]
+  tbl_peralatan  tbl_peralatan[]
+}
+
+model tbl_position {
+  position_id       Int       @id @default(autoincrement())
+  is_active         Int?
+  position          Int?
+  created_date      DateTime? @db.DateTime(0)
+  created_by        Int?
+  modified_date     DateTime? @db.DateTime(0)
+  modified_by       Int?
+  pwk_id            Int?
+  jml_formasi       Int?
+  requirement       String?   @db.VarChar(500)
+  keterangan        String?   @db.VarChar(300)
+  open_date         DateTime? @db.Date
+  close_date        DateTime? @db.Date
+  age_min           Int?
+  age_max           Int?
+  pendidikan_id     Int?
+  quota_pendaftaran Int?
+  min_ipk           String?   @db.VarChar(4)
+}
+
+model tbl_role {
+  role_id         Int     @id @default(autoincrement())
+  role_keterangan String? @db.VarChar(50)
+}
+
+model tbl_sppd {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  fungsi     String   @db.Text
+  perihal    String   @db.Text
+  input_by   Int?
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_supir {
+  id_pinjam_supir      Int                  @id @unique(map: "id_supir") @default(autoincrement())
+  id_m_supir           Int
+  id_peminjaman_mobil  Int
+  tbl_m_supir          tbl_m_supir          @relation(fields: [id_m_supir], references: [id_m_supir], onDelete: NoAction, onUpdate: NoAction, map: "tbl_supir_ibfk_1")
+  tbl_mobil_user_input tbl_mobil_user_input @relation(fields: [id_peminjaman_mobil], references: [id_peminjaman_mobil], onDelete: NoAction, onUpdate: NoAction, map: "tbl_supir_ibfk_2")
+
+  @@index([id_m_supir], map: "id_m_supir")
+  @@index([id_peminjaman_mobil], map: "id_peminjaman_mobil")
+}
+
+model tbl_tugas {
+  id         Int      @id @default(autoincrement())
+  tanggal    DateTime @db.Date
+  nomor      String   @db.Text
+  fungsi     String   @db.Text
+  perihal    String   @db.Text
+  input_by   Int?
+  input_date DateTime @db.DateTime(0)
+}
+
+model tbl_user {
+  user_id       Int       @id @default(autoincrement())
+  is_active     Int?
+  username      String?   @db.VarChar(20)
+  modified_date DateTime? @db.DateTime(0)
+  fullname      String?   @db.VarChar(50)
+  password      String?   @db.VarChar(50)
+  id_fungsi     Int
+  role          Int
+  last_login    DateTime  @db.DateTime(0)
+
+  @@index([id_fungsi], map: "id_fungsi")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tbl_user_old {
+  user_id           Int       @default(0)
+  activation_code   String?   @db.VarChar(50)
+  is_active         Int?
+  username          String?   @db.VarChar(20)
+  email             String?   @db.VarChar(50)
+  created_date      DateTime? @db.DateTime(0)
+  modified_date     DateTime? @db.DateTime(0)
+  fullname          String?   @db.VarChar(50)
+  password          String?   @db.VarChar(50)
+  ktp_num           String?   @db.VarChar(20)
+  tgl_lahir         DateTime? @db.Date
+  tempat_lahir      String?   @db.VarChar(100)
+  sex               Int?
+  address           String?   @db.VarChar(200)
+  phone             String?   @db.VarChar(20)
+  mobile_phone      String?   @db.VarChar(20)
+  agama_id          Int?
+  marital_status_id Int?
+
+  @@ignore
+}
