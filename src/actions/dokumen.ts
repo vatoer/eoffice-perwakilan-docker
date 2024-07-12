@@ -52,7 +52,9 @@ export const simpanDokumenMasuk = async (
     let savedFilePath = "";
 
     console.log("[CHECK FILE]", file);
+    console.log("[isFile] BEFORE");
     const isFile = file instanceof File;
+    console.log("[isFile] AFTER");
 
     if (isFile) {
       console.log("[isFile]", true);
