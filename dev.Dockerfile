@@ -19,8 +19,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # COPY node_modules ./node_modules
 COPY prisma/db-edispo/linux.schema.prisma ./prisma/db-edispo/linux.schema.prisma
 COPY prisma/db-penomoran/linux.schema.prisma ./prisma/db-penomoran/linux.schema.prisma
-RUN yarn prisma generate --schema ./prisma/db-edispo/linux.schema.prisma
-RUN yarn prisma generate --schema ./prisma/db-penomoran/linux.schema.prisma
+RUN pnpm prisma generate --schema ./prisma/db-edispo/linux.schema.prisma
+RUN pnpm prisma generate --schema ./prisma/db-penomoran/linux.schema.prisma
 
 
-CMD [ "yarn","dev" ]
+CMD [ "pnpm","dev" ]

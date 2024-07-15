@@ -4,6 +4,7 @@ echo --------------------------
 
 cd /app
 
-yarn build
+pnpm build
 
-node .next/standalone/server.js
+pnpm start
+# node .next/standalone/server.js
