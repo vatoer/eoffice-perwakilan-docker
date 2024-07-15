@@ -84,7 +84,10 @@ export const simpanBerita = async (berita: Berita) => {
     // Extract berita_file from berita object and omit it
     const { berita_file, perwakilan_nama, ...beritaWithoutFile } = berita;
 
-    console.log("[SIMPAN BERITA] beritaWithoutFile", beritaWithoutFile);
+    console.log(
+      "[SIMPAN BERITA] beritaWithoutFile",
+      beritaWithoutFile.berita_kd
+    );
 
     const arsip_kd = berita.arsip_kd || nextArsipKd;
 

@@ -4,7 +4,7 @@ import { simpanBerita, updateBeritaFile } from "@/data/berita";
 import { getInboxForEditing } from "@/data/inbox";
 import { uploadFile } from "@/lib/legacy-edispo/upload-file";
 import { setPassword } from "@/lib/pdf";
-import { BASE_PATH_UPLOAD_MASUK, saveFile } from "@/lib/save-file";
+import { BASE_PATH_UPLOAD, saveFile } from "@/lib/save-file";
 import { Berita, BeritaWithoutFile } from "@/zod/schemas/berita";
 import { auth } from "@auth/auth";
 import fs from "fs";
@@ -33,7 +33,7 @@ export const simpanDokumenMasuk = async (
 
   const file = formData.get("file");
   const berita: Berita = JSON.parse(formData.get("berita") as string);
-  console.log("berita", berita);
+  console.log("[SIMPAN DOKUMEN MASUK]", berita.berita_kd);
   //berita.berita_file = file;
 
   try {
@@ -77,7 +77,7 @@ export const simpanDokumenMasuk = async (
     berita.berita_input_fungsi = session?.user.fungsi_kd;
 
     const beritaBaru = await simpanBerita(berita);
-    console.log("[simpanBerita]", beritaBaru);
+    console.log("[simpanBerita]", beritaBaru.berita_kd);
 
     // Move the file to the final destination
     // DO NOT PROCESS THE FILE IF THERE IS NO FILE
@@ -104,12 +104,23 @@ export const simpanDokumenMasuk = async (
 
     const BRPath = beritaBaru.sifat_kd === 2 ? "RAHASIA" : "BIASA";
 
-    if (!BASE_PATH_UPLOAD_MASUK || !fs.existsSync(BASE_PATH_UPLOAD_MASUK)) {
+    if (!BASE_PATH_UPLOAD || !fs.existsSync(BASE_PATH_UPLOAD)) {
       console.warn("BASE_PATH_UPLOAD not found, using process.cwd()");
-      yearlyFolder = path.join(process.cwd(), "files", BRPath, year.toString());
+      yearlyFolder = path.join(
+        process.cwd(),
+        "files",
+        BRPath,
+        year.toString(),
+        "MASUK"
+      );
     } else {
       // BASE_PATH_UPLOAD must exist before creating child folders
-      yearlyFolder = path.join(BASE_PATH_UPLOAD_MASUK, BRPath, year.toString());
+      yearlyFolder = path.join(
+        BASE_PATH_UPLOAD,
+        BRPath,
+        year.toString(),
+        "MASUK"
+      );
     }
 
     if (!fs.existsSync(yearlyFolder)) {
@@ -134,14 +145,16 @@ export const simpanDokumenMasuk = async (
 
     // LEGACY EDISPO
     // if LEGACY_EDISPO_ENABLED is true, upload the file to the legacy edispo
-    const inout = "masuk";
-    const fileData = await fs.promises.readFile(finalPath);
-    const id = beritaBaru.arsip_kd;
-    const upload = await uploadFile(newFileName, fileData, year, id, inout);
+    if (process.env.LEGACY_EDISPO_ENABLED === "true") {
+      const inout = "masuk";
+      const fileData = await fs.promises.readFile(finalPath);
+      const id = beritaBaru.arsip_kd;
+      const upload = await uploadFile(newFileName, fileData, year, id, inout);
 
-    if (!upload.success) {
-      upload.error += " | File gagal diupload ke server edispo";
-      return upload;
+      if (!upload.success) {
+        upload.error += " | File gagal diupload ke server edispo";
+        return upload;
+      }
     }
 
     const updateBerita = await updateBeritaFile(

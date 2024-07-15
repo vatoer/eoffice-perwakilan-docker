@@ -13,7 +13,6 @@ RUN \
     else echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && yarn install; \
     fi
 
-
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Generate Prisma Client

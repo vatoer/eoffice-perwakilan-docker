@@ -37,7 +37,7 @@ export const downloadFile = async (inout: string, file: string) => {
   const jwt = process.env.FILESERVER_JWT;
   //console.log("jwt", jwt);
 
-  const maxRetries = 10;
+  const maxRetries = 3;
   let attempts = 0;
 
   while (attempts < maxRetries) {

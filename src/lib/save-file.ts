@@ -4,9 +4,8 @@ import fs from "fs";
 import path from "path";
 
 export const BASE_PATH_UPLOAD = process.env.BASE_PATH_UPLOAD;
-export const BASE_PATH_UPLOAD_KELUAR = process.env.BASE_PATH_UPLOAD_KELUAR;
-export const BASE_PATH_UPLOAD_MASUK = process.env.BASE_PATH_UPLOAD_MASUK;
 export const TMP_UPLOAD_PATH = process.env.TMP_UPLOAD_PATH;
+export const LEGACY_EDISPO_ENABLED = process.env.LEGACY_EDISPO_ENABLED;
 
 type SaveFileOptions = {
   file: File;
@@ -81,3 +80,44 @@ export const saveFile = async ({
     return { success: false, error: "Failed to save data" };
   }
 };
+
+/**
+ * Saves a Blob content to a file.
+ * @param dlFile The Blob object containing file content.
+ * @param pathtosave The path where the file should be saved.
+ * @returns Promise<string> A promise resolving to the saved file path or rejecting with an error.
+ */
+export async function saveBlobToFile(
+  dlFile: Blob | undefined,
+  pathtosave: string
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (!dlFile) {
+      reject(new Error("No file (Blob) to download"));
+      return;
+    }
+
+    const chunks: Uint8Array[] = [];
+    dlFile
+      .arrayBuffer()
+      .then((arrayBuffer) => {
+        const buffer = Buffer.from(arrayBuffer);
+
+        try {
+          fs.mkdirSync(path.dirname(pathtosave), { recursive: true });
+
+          fs.writeFileSync(pathtosave, buffer);
+
+          console.log("File saved successfully:", pathtosave);
+          resolve(pathtosave);
+        } catch (err) {
+          console.error("Failed to save file:", err);
+          reject(err);
+        }
+      })
+      .catch((err) => {
+        console.error("Error reading Blob content:", err);
+        reject(err);
+      });
+  });
+}

@@ -7,7 +7,7 @@ import {
 } from "@/data/berita-keluar";
 import { uploadFile } from "@/lib/legacy-edispo/upload-file";
 import { setPassword } from "@/lib/pdf";
-import { BASE_PATH_UPLOAD_KELUAR, saveFile } from "@/lib/save-file";
+import { BASE_PATH_UPLOAD, saveFile } from "@/lib/save-file";
 import {
   BeritaKeluar,
   BeritaKeluarEditMode,
@@ -91,15 +91,22 @@ export const simpanDokumenKeluar = async (
 
     const BRPath = beritaKeluarbaru.sifat_kd === 1 ? "RAHASIA" : "BIASA";
 
-    if (!BASE_PATH_UPLOAD_KELUAR || !fs.existsSync(BASE_PATH_UPLOAD_KELUAR)) {
-      console.warn("BASE_PATH_UPLOAD_KELUAR not found, using process.cwd()");
-      yearlyFolder = path.join(process.cwd(), "files", BRPath, year.toString());
-    } else {
-      // BASE_PATH_UPLOAD_KELUAR must exist before creating child folders
+    if (!BASE_PATH_UPLOAD || !fs.existsSync(BASE_PATH_UPLOAD)) {
+      console.warn("BASE_PATH_UPLOAD not found, using process.cwd()");
       yearlyFolder = path.join(
-        BASE_PATH_UPLOAD_KELUAR,
+        process.cwd(),
+        "files",
         BRPath,
-        year.toString()
+        year.toString(),
+        "KELUAR"
+      );
+    } else {
+      // BASE_PATH_UPLOAD must exist before creating child folders
+      yearlyFolder = path.join(
+        BASE_PATH_UPLOAD,
+        BRPath,
+        year.toString(),
+        "KELUAR"
       );
     }
 
@@ -128,14 +135,16 @@ export const simpanDokumenKeluar = async (
 
     // LEGACY EDISPO
     // if LEGACY_EDISPO_ENABLED is true, upload the file to the legacy edispo
-    const inout = "keluar";
-    const fileData = await fs.promises.readFile(finalPath);
-    const id = beritaKeluarbaru.arsip_kd;
-    const upload = await uploadFile(newFileName, fileData, year, id, inout);
+    if (process.env.LEGACY_EDISPO_ENABLED === "true") {
+      const inout = "keluar";
+      const fileData = await fs.promises.readFile(finalPath);
+      const id = beritaKeluarbaru.arsip_kd;
+      const upload = await uploadFile(newFileName, fileData, year, id, inout);
 
-    if (!upload.success) {
-      upload.error += " | File gagal diupload ke server edispo";
-      return upload;
+      if (!upload.success) {
+        upload.error += " | File gagal diupload ke server edispo";
+        return upload;
+      }
     }
 
     const updateBeritaKeluar = await updateBeritaKeluarFile(
