@@ -22,14 +22,14 @@ NODE_ENV="testing"
 # https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding
 # P@ssword become P%40ssword
 
-DATABASE_URL_EDISPO="mysql://cuximporter:Cuxedisposisi2023@192.168.45.9:3306/db_edisposisi?schema=public"
-DATABASE_URL_PENOMORAN="mysql://eoffice:e6cbea3ffd41c28643562eae22173f1c@192.168.45.110:3306/db_peminjaman?"
+DATABASE_URL_EDISPO="mysql://username:password@localhost:3306/db_edisposisi?schema=public"
+DATABASE_URL_PENOMORAN="mysql://username:password@localhost:3306/db_peminjaman?"
 
 # sesuaikan dengan tabel di database
 EDISPO_JENIS_KD_R=8
 EDISPO_JENIS_KD_B=1
 
-FILESERVER_URL="https://edispo.ambparis.local/fileserver"
+FILESERVER_URL="https://localhos/fileserver"
 FILESERVER_JWT="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZWRpc3BvLmFtYnBhcmlzLmxvY2FsIiwiYXVkIjoiaHR0cHM6XC9cL2ZpbGUtZWRpc3BvLmFtYnBhcmlzLmxvY2FsIiwiaWF0IjoxNzE3NzUxNjcyLCJuYmYiOjE3MTc3NTE2NzIsImV4cCI6MTc0OTI4NzY3MiwiZGF0YSI6eyJ1c2VybmFtZSI6ImVvZmZpY2UifX0.yMl9RCgSfN5eAiawSM43S-xAkIZvg6oApqIkOqbD3M4"
 
 BASE_PATH_UPLOAD="/UPLOAD"
@@ -47,4 +47,11 @@ sudo chown -R komunikasi:komunikasi /UPLOAD
 
 ```sh
 bash deploy.sh
+```
+
+```sh
+npm install pm2 -g
+pm2 start pnpm --name eoffice -- start -p 3000
+# pm2 start pnpm --name eoffice -- start -p 3001
+# pm2 start pnpm --name eoffice -- start -p 3002
 ```
