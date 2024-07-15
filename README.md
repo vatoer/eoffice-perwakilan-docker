@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# README
 
-## Getting Started
+## CLONE
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```sh
+git clone https://github.com/vatoer/eoffice-perwakilan-docker.git
+cd eoffice-perwakilan-docker
+cp .env.dist .env
+nano .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ubah sesuai kebutuhan
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NODE_ENV="testing"
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
 
-## Learn More
+# DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+# https://www.prisma.io/docs/orm/reference/connection-urls
+# https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding
+# P@ssword become P%40ssword
 
-To learn more about Next.js, take a look at the following resources:
+DATABASE_URL_EDISPO="mysql://cuximporter:Cuxedisposisi2023@192.168.45.9:3306/db_edisposisi?schema=public"
+DATABASE_URL_PENOMORAN="mysql://eoffice:e6cbea3ffd41c28643562eae22173f1c@192.168.45.110:3306/db_peminjaman?"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# sesuaikan dengan tabel di database
+EDISPO_JENIS_KD_R=8
+EDISPO_JENIS_KD_B=1
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+FILESERVER_URL="https://edispo.ambparis.local/fileserver"
+FILESERVER_JWT="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZWRpc3BvLmFtYnBhcmlzLmxvY2FsIiwiYXVkIjoiaHR0cHM6XC9cL2ZpbGUtZWRpc3BvLmFtYnBhcmlzLmxvY2FsIiwiaWF0IjoxNzE3NzUxNjcyLCJuYmYiOjE3MTc3NTE2NzIsImV4cCI6MTc0OTI4NzY3MiwiZGF0YSI6eyJ1c2VybmFtZSI6ImVvZmZpY2UifX0.yMl9RCgSfN5eAiawSM43S-xAkIZvg6oApqIkOqbD3M4"
 
-## Deploy on Vercel
+BASE_PATH_UPLOAD="/UPLOAD"
+TMP_UPLOAD_PATH="/UPLOAD//TMP"
+LEGACY_EDISPO_ENABLED=true
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## CREATE FOLDER FOR UPLOADS
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```sh
+sudo mkdir /UPLOAD
+sudo chmod -R 755 /UPLOAD
+sudo chown -R komunikasi:komunikasi /UPLOAD
+```
+
+```sh
+bash deploy.sh
+```
