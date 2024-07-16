@@ -1,9 +1,7 @@
 import { dbEdispo } from "@/lib/db-edispo";
-import { tbl_berita, tbl_cux, tbl_perwakilan } from "@prisma-dbedispo/client";
+import { tbl_cux } from "@prisma-dbedispo/client";
 
 import { env } from "process";
-import { any } from "zod";
-import { ReturnType } from "./types";
 
 // lihat tabel tabel berikut
 // tbl_jenis_berita
@@ -201,7 +199,7 @@ export const insertToEdispo = async (data: Omit<tbl_cux, "id">[]) => {
 
         //hardcoded jika tidak ada pendispo maka set ke 2 , biasanya 2 adalah komunikasi
         if (!item.pendispo || item.pendispo === undefined) {
-          item.pendispo = "2";
+          item.pendispo = 2;
         }
 
         next = nexArsipKd(next);
@@ -230,7 +228,7 @@ export const insertToEdispo = async (data: Omit<tbl_cux, "id">[]) => {
             tgl_diarsipkan: currentDate,
             perihal_berita: item.perihal_berita!,
             berita_disposisikan: item.is_disposisi ? "Y" : "T",
-            berita_fungsi_disposisi: parseInt(item.pendispo),
+            berita_fungsi_disposisi: item.pendispo,
             berita_input_fungsi: 2, //hardcoded
             berita_input_user: 2, //hardcoded,
             // tbl_derajat: {

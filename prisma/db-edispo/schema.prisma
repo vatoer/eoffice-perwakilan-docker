@@ -94,7 +94,7 @@ model tbl_cux {
   no_agenda       String
   rahasia         String
   is_disposisi    Boolean
-  pendispo        String?  @db.VarChar(256)
+  pendispo        Int      @default(0)
   created_at      DateTime @default(now())
   map_to          String?  @db.VarChar(256)
 }

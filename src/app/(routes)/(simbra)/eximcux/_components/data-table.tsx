@@ -12,7 +12,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Pagination } from "@/components/datatable/pagination";
@@ -24,9 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Rowdies } from "next/font/google";
-import { use, useCallback, useEffect, useState } from "react";
-import { boolean, string } from "zod";
+import { useEffect, useState } from "react";
+import { string } from "zod";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -100,6 +98,7 @@ export function DataTable<TData, TValue>({
         console.log("changeAllOptions");
         setData((old) =>
           old.map((row, index) => {
+            //console.log("updateData");
             return {
               ...old[index],
               [columnId]: value,
