@@ -1,10 +1,14 @@
 const SettingGeneralPage = () => {
-  const envVariables = Object.keys(process.env)
-    .filter((key) => !key.startsWith("SECRET_"))
-    .reduce((obj, key) => {
+  const excludedKeywords = ["SECRET", "TOKEN", "KEY", "PASSWORD", "JWT"];
+
+  const envVariables = Object.keys(process.env).reduce((obj, key) => {
+    if (excludedKeywords.some((keyword) => key.includes(keyword))) {
+      (obj as { [key: string]: string })[key] = "********";
+    } else {
       (obj as { [key: string]: string })[key] = process.env[key]!;
-      return obj;
-    }, {} as { [key: string]: string });
+    }
+    return obj;
+  }, {} as { [key: string]: string });
 
   return (
     <div>
