@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Create Next App",
+  title: "Eoffice",
   description: "Eoffice",
 };
 

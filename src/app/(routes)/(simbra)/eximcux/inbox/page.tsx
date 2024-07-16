@@ -7,7 +7,7 @@ const InboxPage = async () => {
 
   return (
     <div className="flex flex-row gap-1 mailbox-container">
-      <div className="w-full md:w-2/3 mailbox-container__left border-r border-2">
+      <div className="w-full md:w-1/2 border-r border-2">
         <MailboxList inbox={inbox} />
       </div>
       <div className="hidden md:block w-full h-full">

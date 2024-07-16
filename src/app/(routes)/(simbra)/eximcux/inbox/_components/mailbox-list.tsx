@@ -8,6 +8,32 @@ import {
 } from "react-window";
 import MailListItem from "./mail-list-item";
 
+// Custom hook to handle window resize and list height calculation
+const useWindowHeight = (offset: number) => {
+  const [height, setHeight] = useState(0);
+
+  const updateHeight = useCallback(() => {
+    if (typeof window !== "undefined") {
+      setHeight(window.innerHeight - offset);
+    }
+  }, [offset]);
+
+  useEffect(() => {
+    updateHeight();
+  }, [updateHeight]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", updateHeight);
+      return () => {
+        window.removeEventListener("resize", updateHeight);
+      };
+    }
+  }, [updateHeight]);
+
+  return height;
+};
+
 interface MailboxListProps {
   inbox: InboxCuxImported[];
 }
@@ -15,29 +41,12 @@ interface MailboxListProps {
 const MailboxList = ({ inbox }: MailboxListProps) => {
   const { searchTerm } = useSearchTerm();
   const listRef = useRef<List>(null);
-  const [listHeight, setListHeight] = useState(0);
+  const listHeight = useWindowHeight(82);
 
-  // Function to update list height
-  const updateListHeight = useCallback(() => {
-    if (typeof window !== "undefined") {
-      setListHeight(window.innerHeight - 76);
-    }
-  }, []);
-
-  // Set the initial list height
+  // This effect triggers a re-render when the searchTerm changes
   useEffect(() => {
-    updateListHeight();
-  }, [updateListHeight]);
-
-  // Add event listener for window resize
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", updateListHeight);
-      return () => {
-        window.removeEventListener("resize", updateListHeight);
-      };
-    }
-  }, [updateListHeight]);
+    listRef.current?.resetAfterIndex(0);
+  }, [searchTerm]);
 
   const filteredInbox = inbox.filter((mail) => {
     if (!searchTerm || searchTerm === "") return true;
