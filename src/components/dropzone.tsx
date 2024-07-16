@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DropzoneOptions, FileRejection, useDropzone } from "react-dropzone";
+import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { Button } from "./ui/button";
 
 //https://mortenbarklund.com/blog/react-typescript-props-spread/
@@ -29,7 +29,7 @@ const Dropzone = ({ options, children, ...props }: DropzoneProps) => {
 
   return (
     <>
-      <Button variant={"default"} onClick={open} className="mb-2">
+      <Button variant={"default"} onClick={open} className="m-2">
         Select files to upload
       </Button>
       <div {...getRootProps({ ...props })}>

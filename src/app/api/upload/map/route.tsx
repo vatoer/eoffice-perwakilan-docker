@@ -4,7 +4,7 @@ import {
   getOutputFilePath,
   setPasswordForPDF,
 } from "@/utils/pdf-utils";
-import { FILESERVER_URL, login } from "@api/files/_utils/fetcher";
+import { FILESERVER_URL, JWT } from "@api/files/_utils/fetcher";
 import axios from "axios";
 import fs from "fs";
 import https from "https";
@@ -53,7 +53,11 @@ export const POST = async (
   let unmapppedFiles: MapFile[] = [];
 
   try {
-    const jwt = await login();
+    if (!JWT) {
+      throw new Error("JWT token not found");
+    }
+
+    const jwt = JWT;
 
     const data = await req.formData();
     const nameOfFiles = data.get("nameOfFiles") as string;
