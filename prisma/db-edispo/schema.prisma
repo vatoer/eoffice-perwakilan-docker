@@ -61,7 +61,7 @@ model tbl_berita {
 model tbl_berita_keluar {
   arsip_kd       String    @id @db.VarChar(20)
   sifat_kd       Int?
-  berita_kd      String?   @db.VarChar(50)
+  berita_kd      String    @db.VarChar(50)
   pembuat_kd     String?   @db.VarChar(50)
   tgl_berita     DateTime? @db.Date
   perihal_berita String?   @db.VarChar(255)

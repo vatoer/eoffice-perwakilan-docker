@@ -128,6 +128,7 @@ export const simpanDokumenKeluar = async (
         //jika tidak bs di password gmn ? upload ulang ? krn sdh terlanjur di save
         return passwordedPdf;
       }
+      console.log("[SET PASSWORD DOKUMEN RAHASIA]", passwordedPdf);
     } else {
       // if Berita Biasa then move the file to the final destination
       fs.renameSync(savedFilePath, finalPath);

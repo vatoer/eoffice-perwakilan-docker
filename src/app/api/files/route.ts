@@ -3,7 +3,6 @@ import { getOutboxByArsipKd } from "@/data/outbox";
 import { BASE_PATH_UPLOAD, saveBlobToFile } from "@/lib/save-file";
 import fs from "fs";
 import path from "path";
-import { cwd } from "process";
 import { downloadFile } from "./_utils/fetcher";
 
 export async function GET(req: Request) {
@@ -40,6 +39,10 @@ export async function GET(req: Request) {
         }
         filename = outbox.berita_file;
         BRPath = outbox.sifat_kd === 1 ? "RAHASIA" : "BIASA"; // PERHATIAN PERBEDAAN DENGAN inbox SIFAT_KD
+        const datePortion = outbox.berita_kd.split("/").pop()!;
+        // Extract the year part (YY)
+        const yearPart = datePortion.substring(0, 2);
+        year = parseInt(yearPart) < 50 ? `20${yearPart}` : `19${yearPart}`;
         break;
 
       default:
