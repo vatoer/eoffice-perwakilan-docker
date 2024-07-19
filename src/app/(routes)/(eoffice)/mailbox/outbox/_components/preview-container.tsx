@@ -12,10 +12,10 @@ const PdfPreviewContainer = () => {
     );
   }
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       <PdfPreview
         fileUrl={`/api/files?id=${suratId}&inout=keluar`}
-        className="hidden md:block md:w-full h-[calc(100vh-125px)]"
+        className="md:block md:w-full h-[calc(100vh-125px)]"
       />
     </div>
   );
