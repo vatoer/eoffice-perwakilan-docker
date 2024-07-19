@@ -10,6 +10,7 @@ import { useSuratId } from "@/hooks/use-surat-id";
 import { useToggleFormDispo } from "@/hooks/use-toggle-form-dispo";
 import { cn } from "@/lib/utils";
 import { tbl_fungsi, tbl_instruksi } from "@prisma-dbedispo/client";
+import { Loader } from "lucide-react";
 import {
   Dispatch,
   SetStateAction,
@@ -75,7 +76,10 @@ const FormDisposisi = ({
     console.log("Received catatan from child:", value);
   }, []);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     const groupedItems: { [key: string]: { [subKey: number]: number } } = {};
 
     Object.entries(checkedItems).forEach(([key, value]) => {
@@ -126,6 +130,8 @@ const FormDisposisi = ({
       setModeDisposisi("R");
 
       console.log("disposisi", disposisi);
+      setIsSubmitting(false);
+
       toast.success("Disposisi berhasil disimpan");
     } catch (error) {
       console.error("Error saving disposisi", error);
@@ -247,7 +253,10 @@ const FormDisposisi = ({
             <DisposisiCatatan onCatatanChange={handleCatatanChange} />
           </div>
           <div className="flex w-full justify-end p-2">
-            <Button onClick={handleSubmit}>Disposisikan</Button>
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              Disposisikan
+              {isSubmitting && <Loader className="w-6 h-6 animate-spin" />}
+            </Button>
           </div>
         </div>
       </div>
