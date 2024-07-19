@@ -1,12 +1,14 @@
 "use client";
 import PdfPreview from "@/components/pdf-preview";
 import { useSuratId } from "@/hooks/use-surat-id";
+import { cn } from "@/lib/utils";
 
 const PdfPreviewContainer = () => {
   const { suratId } = useSuratId();
+  const height = "h-[calc(100vh-82px)]";
   if (!suratId) {
     return (
-      <div className="hidden md:block md:w-full h-[calc(100vh-125px)] bg-gray-400">
+      <div className={cn(height, "hidden md:block md:w-full  bg-gray-400")}>
         Silakan klik surat untuk melihat berkas PDF
       </div>
     );
@@ -15,7 +17,7 @@ const PdfPreviewContainer = () => {
     <div className="w-full h-full">
       <PdfPreview
         fileUrl={`/api/files?id=${suratId}&inout=keluar`}
-        className="md:block md:w-full h-[calc(100vh-125px)]"
+        className={`md:block md:w-full ${height}`}
       />
     </div>
   );

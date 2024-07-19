@@ -12,7 +12,7 @@ const MailFilePdfPreview = ({ suratId, inout }: MailFilePdfPreviewProps) => {
     <div className="flex flex-col w-full">
       <PdfPreview
         fileUrl={`/api/files?id=${suratId}&inout=${inout}`}
-        className="w-full h-[calc(100vh-125px)]"
+        className="w-full h-[calc(100vh-135px)]"
       />
     </div>
   );

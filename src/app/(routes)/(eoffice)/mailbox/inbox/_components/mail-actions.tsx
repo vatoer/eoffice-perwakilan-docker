@@ -28,7 +28,8 @@ const MailActions = ({ className, user_fungsi_kd }: MailActionsProps) => {
   useEffect(() => {
     const initialMode = setInitialMode(inboxStore, user_fungsi_kd);
     setModeDisposisi(initialMode);
-  }, [suratId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [suratId, inboxStore, user_fungsi_kd]);
 
   return (
     <div

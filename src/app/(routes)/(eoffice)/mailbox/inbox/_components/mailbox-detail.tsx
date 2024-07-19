@@ -42,7 +42,7 @@ const MailboxDetail = () => {
       <div className="flex flex-col w-full">
         <PdfPreview
           fileUrl={`/api/files?id=${suratId}`}
-          className="h-[calc(100vh-100px)]"
+          className="h-[calc(100vh-135px)]"
         />
       </div>
     </div>

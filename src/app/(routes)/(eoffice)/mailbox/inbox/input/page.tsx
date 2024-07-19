@@ -12,8 +12,8 @@ const InboxInputPage = () => {
           <div className="w-full lg:w-1/2">
             <FormContainer />
           </div>
-          <div className="hidden md:flex md:w-full lg:w-1/2 md:h-[600px] lg:h-[calc(100vh-100px)] bg-gray-500">
-            <PdfPreviewContainer />
+          <div className="hidden md:flex md:w-full lg:w-1/2 md:h-[600px] lg:h-[calc(100vh-135px)] bg-gray-500">
+            <PdfPreviewContainer className="lg:h-[calc(100vh-135px)] bg-gray-500" />
           </div>
         </div>
       </div>

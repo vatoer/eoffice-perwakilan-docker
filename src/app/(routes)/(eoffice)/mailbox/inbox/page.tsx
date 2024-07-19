@@ -33,7 +33,7 @@ const InboxPage = async () => {
         <MailboxList inbox={inbox} />
       </div>
       <div className="md:flex flex-col w-full hidden">
-        <MailActions user_fungsi_kd={user_fungsi_kd} />
+        <MailActions user_fungsi_kd={user_fungsi_kd} className="h-full" />
         <div className="hidden relative group md:flex flex-row md:w-full">
           <DisposisiContainer
             instruksi={instruksi}

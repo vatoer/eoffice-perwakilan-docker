@@ -13,7 +13,7 @@ const OutboxInboxPage = () => {
             <FormContainer />
           </div>
           <div className="hidden md:flex md:w-full lg:w-1/2 md:h-[600px] lg:h-[calc(100vh-155px)] bg-gray-500">
-            <PdfPreviewContainer />
+            <PdfPreviewContainer className="h-[calc(100vh-135px)]" />
           </div>
         </div>
       </div>

@@ -209,7 +209,7 @@ const FormDisposisi = ({
     return (
       <div
         className={cn(
-          "p-4 md:w-full lg:w-[550px] flex flex-row gap-2 h-[calc(100vh-100px)] bg-gray-300",
+          "p-4 md:w-full lg:w-[550px] flex flex-row gap-2 h-[calc(100vh-135px)] bg-gray-300",
           {
             hidden: !onOff,
           }

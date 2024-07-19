@@ -14,7 +14,7 @@ const PreviewContainer = () => {
     <div>
       <PdfPreview
         fileUrl={fileUrl}
-        className="w-full min-h-[calc(100vh-125px)]"
+        className="w-full min-h-[calc(100vh-135px)]"
       />
     </div>
   );

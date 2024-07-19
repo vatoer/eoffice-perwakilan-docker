@@ -128,10 +128,7 @@ const FormInbox = ({ editId }: FormInboxProps) => {
       }
 
       if (isEditMode) {
-        setTimeout(() => {
-          // router push to inbox
-          router.push("/mailbox/inbox");
-        }, 1000);
+        router.push("/mailbox/inbox");
       }
     } else {
       toast.error("Gagal menyimpan dokumen");

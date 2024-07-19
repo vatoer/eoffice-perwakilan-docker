@@ -2,6 +2,11 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
+const isObjectUrl = (url: string): boolean => {
+  const objectUrlPattern = /^blob:.+/;
+  return objectUrlPattern.test(url);
+};
+
 interface PdfViewerSkeletonProps {
   placeholder?: string;
   className?: string;
@@ -34,14 +39,24 @@ interface PdfPreviewProps {
 export const PdfPreview = ({ fileUrl, className }: PdfPreviewProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [iframeSrc, setIframeSrc] = useState<string | null>(null);
-
+  const handleError = () => {
+    setIsLoading(false);
+    // Optionally, add error handling logic here
+    console.error("Failed to load PDF file");
+  };
   // Reset isLoading state when fileUrl changes
   useEffect(() => {
+    if (!fileUrl) {
+      handleError();
+      return;
+    }
+    if (isObjectUrl(fileUrl)) {
+      setIframeSrc(fileUrl);
+      console.log("object url", fileUrl);
+      return;
+    }
+
     const loadPdf = async () => {
-      if (!fileUrl) {
-        handleError();
-        return;
-      }
       setIsLoading(true); // Set loading state to true when a new fileUrl is set
       try {
         const response = await fetch(fileUrl);
@@ -63,7 +78,7 @@ export const PdfPreview = ({ fileUrl, className }: PdfPreviewProps) => {
 
   if (!fileUrl) {
     return (
-      <div className="w-full  border-2 border-t-0">
+      <div className="w-full h-full  border-t-0">
         <PdfViewerSkeleton
           className={className + " animate-none "}
           placeholder="pdf preview"
@@ -72,19 +87,9 @@ export const PdfPreview = ({ fileUrl, className }: PdfPreviewProps) => {
     );
   }
 
-  const handleLoad = () => {
-    setIsLoading(false);
-  };
-
-  const handleError = () => {
-    setIsLoading(false);
-    // Optionally, add error handling logic here
-    console.error("Failed to load PDF file");
-  };
-
   if (!fileUrl) {
     return (
-      <div className="w-full border-2 border-t-0">
+      <div className="w-full  border-t-0">
         <PdfViewerSkeleton
           className={className + " animate-none "}
           placeholder="pdf preview"
@@ -94,7 +99,7 @@ export const PdfPreview = ({ fileUrl, className }: PdfPreviewProps) => {
   }
 
   return (
-    <div className="w-full border-2 border-t-0 h-full">
+    <div className="w-full  border-t-0 h-full">
       {isLoading && <PdfViewerSkeleton className={className} />}
       {!iframeSrc && !isLoading && (
         <PdfViewerSkeleton

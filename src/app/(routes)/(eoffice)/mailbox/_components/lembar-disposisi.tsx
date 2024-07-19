@@ -67,7 +67,7 @@ const LembarDisposisi = ({
       <div
         className={cn(
           !onOff && "hidden",
-          "md:w-full lg:w-1/3 p-4 h-[calc(100vh-125px)]",
+          "md:w-full lg:w-1/3 p-4 h-[calc(100vh-135px)]",
           " bg-gray-100"
         )}
       >
@@ -89,7 +89,7 @@ const LembarDisposisi = ({
     <div
       className={cn(
         "w-full lg:w-1/3 p-4 bg-gray-100 ",
-        "overflow-y-auto overflow-x-hidden h-[calc(100vh-125px)]",
+        "overflow-y-auto overflow-x-hidden h-[calc(100vh-135px)]",
         !onOff && "hidden",
         className && className
       )}

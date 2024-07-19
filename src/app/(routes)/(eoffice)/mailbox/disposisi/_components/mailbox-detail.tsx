@@ -32,7 +32,7 @@ const MailboxDetail = () => {
     >
       <PdfPreview
         fileUrl={`/api/files?id=${suratId}`}
-        className="h-[calc(100vh-125px)]"
+        className="h-[calc(100vh-135px)]"
       />
     </div>
   );
