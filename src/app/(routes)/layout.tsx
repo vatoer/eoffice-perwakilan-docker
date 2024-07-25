@@ -1,5 +1,7 @@
+import LoadingIndicator from "@/components/loading";
 import TopBar from "@/components/navigation/tobbar";
 import MailboxSidebarContariner from "@eoffice/mailbox/_components/mailbox-sidebar-container";
+import { Suspense } from "react";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -15,7 +17,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <div>
           <MailboxSidebarContariner />
         </div>
-        <main className="w-full">{children}</main>
+        <main className="w-full">
+          {children}
+          <Suspense fallback={null}>
+            <LoadingIndicator />
+          </Suspense>
+        </main>
       </div>
     </div>
   );

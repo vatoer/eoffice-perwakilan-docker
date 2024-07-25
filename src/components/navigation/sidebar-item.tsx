@@ -1,3 +1,4 @@
+import { useIsLoading } from "@/hooks/use-loading";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
@@ -21,16 +22,21 @@ const SidebarItem = ({
 }: ISidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
-
+  const { setIsLoading } = useIsLoading();
   const isActive = (pathname === "/" && href === "/") || pathname === href;
   //||pathname?.startsWith(`${href}/`);
 
   const onClick = () => {
-    router.push(href);
+    // check if the current route is the same as the clicked route
+    if (pathname === href) {
+      return;
+    }
+    setIsLoading(true);
   };
 
   return (
     <Link
+      onClick={onClick}
       href={href}
       type="button"
       className={cn(
