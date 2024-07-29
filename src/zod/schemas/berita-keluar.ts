@@ -25,7 +25,7 @@ export const beritaKeluarSchema = z.object({
   //sifat_kd: z.coerce.number().int(), // 1 biasa dan 2 rahasia akan didapatkan dari nomor berita
   pembuat_kd: z.number().int(),
   //tgl_berita: z.coerce.date(), // akan didapatkan dari nomor berita
-  perihal_berita: z.string().max(255),
+  perihal_berita: z.string().max(500),
   berita_file: berkasSchema(maxsize),
   // no_agenda: z.string().max(10).nullable().optional(), didapatkan dari nama file
   // jml_hal: z.number().int().nullable().optional(), // g terlalu penting

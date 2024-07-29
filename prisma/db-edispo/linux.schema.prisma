@@ -36,7 +36,7 @@ model tbl_berita {
   derajat_kd              String                   @db.Char(3)
   tgl_berita              DateTime                 @db.Date
   tgl_diarsipkan          DateTime                 @db.DateTime(0)
-  perihal_berita          String                   @db.VarChar(255)
+  perihal_berita          String                   @db.VarChar(500)
   berita_file             String?                  @db.VarChar(100)
   keterangan              String?                  @db.Text
   status_disposisi        String                   @default("T") @db.Char(1)

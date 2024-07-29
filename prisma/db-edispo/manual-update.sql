@@ -11,3 +11,5 @@ ALTER TABLE tbl_cux MODIFY COLUMN pendispo INT NULL;
 
 ALTER TABLE db_edisposisi.tbl_berita_keluar MODIFY COLUMN berita_kd varchar(50) NOT NULL;
 
+ALTER TABLE db_edisposisi.tbl_berita_keluar MODIFY COLUMN perihal_berita varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL NULL;
+
