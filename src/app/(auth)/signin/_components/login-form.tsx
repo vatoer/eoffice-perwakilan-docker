@@ -1,7 +1,7 @@
 "use client";
+import { Button, buttonVariants } from "@/components/ui/button";
 import InputForm from "@auth/_components/input-form";
 import { UncomplexLoginSchema } from "@auth/_zodschema/login";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Phone } from "lucide-react";
 import { signIn } from "next-auth/react";
@@ -14,7 +14,8 @@ import { z } from "zod";
 export type UncomplexLogin = z.infer<typeof UncomplexLoginSchema>;
 
 const LoginForm = () => {
-  const callbackUrl = useSearchParams().get("callbackUrl") ?? "/";
+  const callbackUrl =
+    useSearchParams().get("callbackUrl") ?? "/mailbox/disposisi";
   const router = useRouter();
 
   const {
